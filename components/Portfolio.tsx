@@ -52,7 +52,7 @@ function Hero() {
           className="relative w-40 h-40 md:w-56 md:h-56 mb-10 rounded-full overflow-hidden border border-cyan-400/50 shadow-[0_0_60px_rgba(34,211,238,0.2)] ring-4 ring-black/50"
         >
           <Image 
-            src="/images/anant-reference.jpg" 
+            src="/images/anant-profile.jpg" 
             alt="Anant Hejib" 
             fill 
             className="object-cover"
