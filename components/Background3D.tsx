@@ -2,7 +2,7 @@
 
 import { useRef } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
-import { Environment, Sparkles } from "@react-three/drei";
+import { Sparkles } from "@react-three/drei";
 import * as THREE from "three";
 
 function AnimatedAvatar() {
@@ -98,7 +98,6 @@ export function Background3D() {
         
         {/* Atmosphere/particles */}
         <Sparkles count={300} scale={15} size={2.5} speed={0.3} opacity={0.4} color="#4fd1e5" />
-        <Environment preset="city" />
       </Canvas>
       {/* Vignette overlay for depth */}
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,#000000_100%)] opacity-70 pointer-events-none" />
