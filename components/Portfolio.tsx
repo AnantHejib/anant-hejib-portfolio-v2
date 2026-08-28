@@ -4,40 +4,53 @@ import { Background3D } from "./Background3D";
 import { projects } from "@/lib/projects";
 import { FaGithub, FaLinkedinIn, FaEnvelope, FaArrowRight } from "react-icons/fa6";
 import { SiPython, SiCplusplus, SiRos, SiOpencv, SiNvidia, SiReact, SiNextdotjs, SiPostgresql, SiTailwindcss, SiTypescript } from "react-icons/si";
-import { motion } from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
 import Image from "next/image";
 import ProjectArchive from "./ProjectArchive";
 import LucyChat from "./LucyChat";
 import ExperienceCanvas from "./ExperienceCanvas";
+import { useRef } from "react";
 
 function Navbar() {
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 px-6 py-4 flex items-center justify-between border-b border-white/10 bg-black/40 backdrop-blur-md">
-      <div className="text-xl font-bold tracking-widest uppercase text-white">AH<span className="text-cyan-400">.</span></div>
-      <div className="hidden md:flex gap-8 text-xs font-semibold tracking-[0.2em] uppercase text-white/70">
+    <nav className="fixed top-0 left-0 right-0 z-50 px-6 py-5 flex items-center justify-between border-b border-white/5 bg-black/20 backdrop-blur-2xl transition-all">
+      <div className="text-2xl font-black tracking-widest uppercase text-white drop-shadow-[0_0_15px_rgba(255,255,255,0.3)]">
+        AH<span className="text-cyan-400">.</span>
+      </div>
+      <div className="hidden md:flex gap-10 text-xs font-bold tracking-[0.25em] uppercase text-white/60">
         <a href="#about" className="hover:text-cyan-400 transition-colors">Profile</a>
         <a href="#experience" className="hover:text-cyan-400 transition-colors">Experience</a>
+        <a href="#leadership" className="hover:text-cyan-400 transition-colors">Leadership</a>
         <a href="#projects" className="hover:text-cyan-400 transition-colors">Projects</a>
-        <a href="#contact" className="hover:text-cyan-400 transition-colors">Contact</a>
       </div>
-      <div className="flex gap-4">
-        <a href="https://github.com/AnantHejib" target="_blank" rel="noreferrer" className="text-white hover:text-cyan-400 transition-colors"><FaGithub size={20} /></a>
-        <a href="https://linkedin.com" target="_blank" rel="noreferrer" className="text-white hover:text-cyan-400 transition-colors"><FaLinkedinIn size={20} /></a>
+      <div className="flex gap-6">
+        <a href="https://github.com/AnantHejib" target="_blank" rel="noreferrer" className="text-white/60 hover:text-cyan-400 transition-colors"><FaGithub size={22} /></a>
+        <a href="https://linkedin.com" target="_blank" rel="noreferrer" className="text-white/60 hover:text-cyan-400 transition-colors"><FaLinkedinIn size={22} /></a>
       </div>
     </nav>
   );
 }
 
 function Hero() {
+  const ref = useRef(null);
+  const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] });
+  const yImage = useTransform(scrollYProgress, [0, 1], [0, 200]);
+  const yText = useTransform(scrollYProgress, [0, 1], [0, 100]);
+  const opacity = useTransform(scrollYProgress, [0, 0.8], [1, 0]);
+
   return (
-    <section id="about" className="min-h-screen flex flex-col items-center justify-center pt-24 px-6 relative z-10 text-center">
-      <motion.div
-        initial={{ opacity: 0, y: 30 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, ease: "easeOut" }}
-        className="max-w-4xl bg-black/20 p-8 md:p-12 rounded-3xl backdrop-blur-sm border border-white/5 flex flex-col items-center"
+    <section ref={ref} id="about" className="min-h-screen flex flex-col items-center justify-center pt-32 px-6 relative z-10 text-center">
+      <motion.div 
+        style={{ opacity, y: yText }}
+        className="max-w-5xl flex flex-col items-center"
       >
-        <div className="relative w-32 h-32 md:w-40 md:h-40 mb-8 rounded-full overflow-hidden border-2 border-cyan-400 shadow-[0_0_30px_rgba(34,211,238,0.3)]">
+        <motion.div 
+          style={{ y: yImage }}
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
+          className="relative w-40 h-40 md:w-56 md:h-56 mb-10 rounded-full overflow-hidden border border-cyan-400/50 shadow-[0_0_60px_rgba(34,211,238,0.2)] ring-4 ring-black/50"
+        >
           <Image 
             src="/images/anant-reference.jpg" 
             alt="Anant Hejib" 
@@ -45,118 +58,121 @@ function Hero() {
             className="object-cover"
             priority
           />
-        </div>
-        <div className="text-cyan-400 text-xs font-mono tracking-widest mb-6 uppercase">Engineering Profile</div>
-        <h1 className="text-5xl md:text-8xl font-black uppercase tracking-tighter text-white mb-6 drop-shadow-2xl">
-          Anant <span className="text-cyan-400">Hejib</span>
-        </h1>
-        <p className="text-lg md:text-xl text-white/80 max-w-2xl mx-auto leading-relaxed font-light mb-10">
-          AI, Computer Vision, and Robotics Engineer building intelligent, autonomous systems. 
-          Currently exploring opportunities to engineer systems where software, perception and real-world engineering converge.
-        </p>
-        <div className="flex flex-wrap items-center justify-center gap-6">
-          <a href="#projects" className="px-8 py-4 bg-cyan-400 text-black font-bold uppercase tracking-widest text-xs rounded-full hover:bg-white transition-all shadow-[0_0_20px_rgba(34,211,238,0.4)]">
-            Explore Work
-          </a>
-          <a href="#contact" className="px-8 py-4 bg-transparent border border-white/20 text-white font-bold uppercase tracking-widest text-xs rounded-full hover:bg-white/10 transition-all">
-            Contact Me
-          </a>
-        </div>
+          {/* Inner glass overlay for premium feel */}
+          <div className="absolute inset-0 rounded-full shadow-[inset_0_0_30px_rgba(0,0,0,0.6)] mix-blend-overlay pointer-events-none" />
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
+        >
+          <div className="inline-block px-4 py-1.5 rounded-full border border-cyan-400/30 bg-cyan-400/5 text-cyan-400 text-[10px] font-mono tracking-[0.3em] mb-8 uppercase backdrop-blur-md">
+            Engineering Profile
+          </div>
+          <h1 className="text-6xl md:text-8xl lg:text-9xl font-black uppercase tracking-tighter text-white mb-8 leading-[0.85] drop-shadow-2xl">
+            Anant <br className="md:hidden" /><span className="text-transparent bg-clip-text bg-gradient-to-br from-cyan-300 to-cyan-600">Hejib</span>
+          </h1>
+          <p className="text-xl md:text-2xl text-white/70 max-w-3xl mx-auto leading-relaxed font-light mb-12 drop-shadow-lg">
+            AI, Computer Vision, and Robotics Engineer building intelligent, autonomous systems. 
+            Currently exploring opportunities where software, perception and real-world engineering converge.
+          </p>
+          <div className="flex flex-wrap items-center justify-center gap-6">
+            <a href="#projects" className="px-10 py-5 bg-cyan-500 text-black font-black uppercase tracking-[0.2em] text-xs rounded-full hover:bg-white hover:scale-105 transition-all duration-300 shadow-[0_0_30px_rgba(34,211,238,0.3)]">
+              Explore Work
+            </a>
+            <a href="#contact" className="px-10 py-5 bg-black/40 border border-white/20 text-white font-bold uppercase tracking-[0.2em] text-xs rounded-full backdrop-blur-xl hover:bg-white/10 hover:border-white/40 transition-all duration-300">
+              Contact Me
+            </a>
+          </div>
+        </motion.div>
       </motion.div>
     </section>
   );
 }
 
-function TechStackMarquee() {
-  const techStack = [
-    { name: "Python", icon: SiPython },
-    { name: "C++", icon: SiCplusplus },
-    { name: "ROS 2", icon: SiRos },
-    { name: "OpenCV", icon: SiOpencv },
-    { name: "CUDA", icon: SiNvidia },
-    { name: "TypeScript", icon: SiTypescript },
-    { name: "React", icon: SiReact },
-    { name: "Next.js", icon: SiNextdotjs },
-    { name: "TailwindCSS", icon: SiTailwindcss },
-    { name: "PostgreSQL", icon: SiPostgresql },
-  ];
-
-  // Duplicate the array to create a seamless infinite loop
-  const infiniteStack = [...techStack, ...techStack];
-
-  return (
-    <div className="relative w-full py-10 overflow-hidden bg-black/40 border-y border-white/10 backdrop-blur-sm z-10 flex items-center">
-      <div className="absolute left-0 w-24 h-full bg-gradient-to-r from-black to-transparent z-20 pointer-events-none"></div>
-      <div className="absolute right-0 w-24 h-full bg-gradient-to-l from-black to-transparent z-20 pointer-events-none"></div>
-      
-      <motion.div
-        className="flex whitespace-nowrap items-center gap-12 w-max"
-        animate={{ x: ["0%", "-50%"] }}
-        transition={{ repeat: Infinity, ease: "linear", duration: 30 }}
-      >
-        {infiniteStack.map((tech, index) => {
-          const Icon = tech.icon;
-          return (
-            <div key={index} className="flex items-center gap-3 text-white/50 hover:text-cyan-400 transition-colors">
-              <Icon size={24} />
-              <span className="text-xl font-bold uppercase tracking-widest">{tech.name}</span>
-            </div>
-          );
-        })}
-      </motion.div>
-    </div>
-  );
-}
-
 function ExperienceSection() {
   return (
-    <section id="experience" className="relative min-h-[80vh] flex items-center py-20 px-6 z-10 bg-black/60 border-y border-white/10 overflow-hidden">
-      {/* 
-        We overlay the ExperienceCanvas inside this section. 
-        It gives the classic "Experience" visual background without breaking the page.
-      */}
-      <div className="absolute inset-0 opacity-50 mix-blend-screen pointer-events-none">
-        <ExperienceCanvas />
-      </div>
-      
-      <div className="max-w-5xl mx-auto relative z-20">
-        <div className="text-cyan-400 text-xs font-mono tracking-widest mb-4 uppercase">Career Timeline</div>
-        <h2 className="text-4xl md:text-6xl font-bold uppercase tracking-tight text-white mb-16">
-          My <span className="text-cyan-400">Experience</span>
-        </h2>
+    <section id="experience" className="relative py-32 px-6 z-10 border-t border-white/5 bg-gradient-to-b from-black/0 to-black/60">
+      <div className="max-w-6xl mx-auto relative z-20">
         
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          <div className="p-8 bg-black/40 border border-white/10 rounded-2xl backdrop-blur-md">
-            <h3 className="text-2xl font-bold text-white mb-2">Robot Vision Systems Engineer</h3>
-            <p className="text-cyan-400 text-sm font-mono tracking-widest mb-4">BlackHole Infiverse (8+ Months)</p>
-            <p className="text-white/60 leading-relaxed mb-6">
+        <motion.div
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
+          className="text-center md:text-left mb-16"
+        >
+          <div className="text-cyan-400 text-xs font-mono tracking-widest mb-4 uppercase drop-shadow-[0_0_10px_rgba(34,211,238,0.5)]">Career Timeline</div>
+          <h2 className="text-5xl md:text-7xl font-black uppercase tracking-tighter text-white drop-shadow-xl">
+            Professional <span className="text-cyan-400">Experience</span>
+          </h2>
+        </motion.div>
+        
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 mb-16">
+          <motion.div 
+            initial={{ opacity: 0, x: -40 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 0.8, delay: 0.1, ease: "easeOut" }}
+            className="p-10 bg-gradient-to-br from-white/[0.03] to-transparent border border-white/10 rounded-3xl backdrop-blur-3xl shadow-[0_8px_32px_rgba(0,0,0,0.5)] hover:border-cyan-400/30 transition-colors group"
+          >
+            <h3 className="text-3xl font-bold text-white mb-2 group-hover:text-cyan-300 transition-colors">Robot Vision Systems Engineer</h3>
+            <p className="inline-block px-3 py-1 rounded bg-cyan-400/10 border border-cyan-400/20 text-cyan-400 text-xs font-mono tracking-widest mb-6">BlackHole Infiverse (8+ Months)</p>
+            <p className="text-white/60 text-lg leading-relaxed mb-8">
               Developed computer-vision software for robotic workflows, converting perception requirements into usable processing modules and integration-ready tools. Hands-on product engineering across the boundary between software and physical systems.
             </p>
-            <div className="flex flex-wrap gap-2">
+            <div className="flex flex-wrap gap-3">
               {["PYTHON", "YOLO", "OPENCV", "ROBOTICS"].map((tech) => (
-                <span key={tech} className="px-3 py-1 text-xs font-mono bg-white/5 text-cyan-200 border border-white/10 rounded">
+                <span key={tech} className="px-4 py-1.5 text-xs font-bold font-mono bg-black/50 text-white/80 border border-white/10 rounded-full shadow-inner">
                   {tech}
                 </span>
               ))}
             </div>
-          </div>
+          </motion.div>
 
-          <div className="p-8 bg-black/40 border border-white/10 rounded-2xl backdrop-blur-md">
-            <h3 className="text-2xl font-bold text-white mb-2">Deep Tech Ventures</h3>
-            <p className="text-cyan-400 text-sm font-mono tracking-widest mb-4">Active Projects</p>
-            <p className="text-white/60 leading-relaxed mb-6">
+          <motion.div 
+            initial={{ opacity: 0, x: 40 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
+            className="p-10 bg-gradient-to-br from-white/[0.03] to-transparent border border-white/10 rounded-3xl backdrop-blur-3xl shadow-[0_8px_32px_rgba(0,0,0,0.5)] hover:border-cyan-400/30 transition-colors group"
+          >
+            <h3 className="text-3xl font-bold text-white mb-2 group-hover:text-cyan-300 transition-colors">Deep Tech Ventures</h3>
+            <p className="inline-block px-3 py-1 rounded bg-cyan-400/10 border border-cyan-400/20 text-cyan-400 text-xs font-mono tracking-widest mb-6">Active Projects</p>
+            <p className="text-white/60 text-lg leading-relaxed mb-8">
               Engineering beyond the screen. Currently working with a deep-tech company on systems where software, perception and real-world engineering converge. 
               Active participant in national hackathons (10+) and Space Robotics (IRoC-U).
             </p>
-            <div className="flex flex-wrap gap-2">
+            <div className="flex flex-wrap gap-3">
               {["C++", "ROS 2", "CUDA", "TENSORRT"].map((tech) => (
-                <span key={tech} className="px-3 py-1 text-xs font-mono bg-white/5 text-cyan-200 border border-white/10 rounded">
+                <span key={tech} className="px-4 py-1.5 text-xs font-bold font-mono bg-black/50 text-white/80 border border-white/10 rounded-full shadow-inner">
                   {tech}
                 </span>
               ))}
             </div>
-          </div>
+          </motion.div>
         </div>
+
+        {/* 
+          Premium isolation of the 3D Canvas. 
+          By placing it in a bounded container, we prevent full-page glitches. 
+        */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.95 }}
+          whileInView={{ opacity: 1, scale: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 1, ease: "easeOut" }}
+          className="relative w-full h-[400px] md:h-[500px] rounded-[2.5rem] overflow-hidden border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.7)]"
+        >
+          {/* Inner shadow overlay */}
+          <div className="absolute inset-0 shadow-[inset_0_0_100px_rgba(0,0,0,0.9)] z-10 pointer-events-none"></div>
+          <ExperienceCanvas />
+          <div className="absolute bottom-6 left-8 z-20 pointer-events-none">
+            <p className="text-cyan-400 text-[10px] font-mono tracking-[0.3em] uppercase opacity-70">Interactive System Visualization</p>
+          </div>
+        </motion.div>
+
       </div>
     </section>
   );
@@ -175,39 +191,69 @@ function LeadershipSection() {
   ];
 
   return (
-    <section id="leadership" className="relative py-20 px-6 z-10 bg-black/40 border-b border-white/10 backdrop-blur-sm">
-      <div className="max-w-5xl mx-auto">
+    <section id="leadership" className="relative py-32 px-6 z-10 bg-gradient-to-b from-black/60 to-black/40 border-y border-white/5 backdrop-blur-sm">
+      <div className="max-w-6xl mx-auto">
         
         {/* Companies Section */}
-        <div className="mb-16">
-          <div className="text-cyan-400 text-xs font-mono tracking-widest mb-4 uppercase text-center md:text-left">Entrepreneurship</div>
-          <h2 className="text-4xl md:text-5xl font-bold uppercase tracking-tight text-white mb-8 text-center md:text-left">
-            My <span className="text-cyan-400">Company</span>
-          </h2>
-          <div className="grid grid-cols-1 gap-6">
+        <div className="mb-24">
+          <motion.div
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 0.8 }}
+            className="mb-12"
+          >
+            <div className="text-cyan-400 text-xs font-mono tracking-widest mb-4 uppercase text-center md:text-left drop-shadow-[0_0_10px_rgba(34,211,238,0.5)]">Entrepreneurship</div>
+            <h2 className="text-5xl md:text-7xl font-black uppercase tracking-tighter text-white text-center md:text-left drop-shadow-xl">
+              My <span className="text-cyan-400">Company</span>
+            </h2>
+          </motion.div>
+          <div className="grid grid-cols-1 gap-8">
             {companies.map((item, index) => (
-              <div key={index} className="p-6 md:p-8 bg-black/40 border border-white/10 rounded-2xl hover:border-cyan-400/50 transition-colors group">
-                <h3 className="text-2xl font-bold text-white mb-2 group-hover:text-cyan-400 transition-colors">{item.title}</h3>
-                <p className="text-cyan-400 font-mono text-sm tracking-wide mb-4">{item.role}</p>
-                <p className="text-white/60 leading-relaxed">{item.description}</p>
-              </div>
+              <motion.div 
+                key={index}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: index * 0.1 }}
+                className="p-8 md:p-12 bg-gradient-to-br from-white/[0.04] to-transparent border border-white/10 rounded-[2rem] backdrop-blur-2xl shadow-[0_8px_32px_rgba(0,0,0,0.4)] hover:border-cyan-400/40 hover:shadow-[0_0_30px_rgba(34,211,238,0.15)] transition-all duration-500 group"
+              >
+                <h3 className="text-4xl font-black text-white mb-3 group-hover:text-cyan-300 transition-colors">{item.title}</h3>
+                <p className="inline-block px-4 py-1.5 rounded-full bg-cyan-400/10 border border-cyan-400/20 text-cyan-400 text-sm font-mono tracking-widest mb-6">{item.role}</p>
+                <p className="text-white/70 text-lg leading-relaxed max-w-3xl">{item.description}</p>
+              </motion.div>
             ))}
           </div>
         </div>
 
         {/* Clubs Section */}
         <div>
-          <div className="text-cyan-400 text-xs font-mono tracking-widest mb-4 uppercase text-center md:text-left">Beyond Engineering</div>
-          <h2 className="text-4xl md:text-5xl font-bold uppercase tracking-tight text-white mb-8 text-center md:text-left">
-            Clubs <span className="text-cyan-400">&</span> Extracurriculars
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <motion.div
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 0.8 }}
+            className="mb-12"
+          >
+            <div className="text-cyan-400 text-xs font-mono tracking-widest mb-4 uppercase text-center md:text-left drop-shadow-[0_0_10px_rgba(34,211,238,0.5)]">Beyond Engineering</div>
+            <h2 className="text-5xl md:text-7xl font-black uppercase tracking-tighter text-white text-center md:text-left drop-shadow-xl">
+              Clubs <span className="text-cyan-400">&</span> Extracurriculars
+            </h2>
+          </motion.div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {clubs.map((item, index) => (
-              <div key={index} className="p-6 bg-black/40 border border-white/10 rounded-2xl hover:border-cyan-400/50 transition-colors group">
-                <h3 className="text-xl font-bold text-white mb-2 group-hover:text-cyan-400 transition-colors">{item.title}</h3>
-                <p className="text-cyan-400 font-mono text-sm tracking-wide mb-3">{item.role}</p>
-                <p className="text-white/50 text-sm leading-relaxed">{item.description}</p>
-              </div>
+              <motion.div 
+                key={index}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: index * 0.1 }}
+                className="p-8 bg-gradient-to-br from-white/[0.03] to-transparent border border-white/10 rounded-3xl backdrop-blur-xl hover:bg-white/[0.05] hover:border-cyan-400/30 transition-all duration-500 group"
+              >
+                <h3 className="text-2xl font-bold text-white mb-3 group-hover:text-cyan-300 transition-colors">{item.title}</h3>
+                <p className="text-cyan-400 font-mono text-xs tracking-[0.15em] mb-4 uppercase">{item.role}</p>
+                <p className="text-white/50 text-base leading-relaxed">{item.description}</p>
+              </motion.div>
             ))}
           </div>
         </div>
@@ -217,46 +263,98 @@ function LeadershipSection() {
   );
 }
 
+function TechStackMarquee() {
+  const techStack = [
+    { name: "Python", icon: SiPython },
+    { name: "C++", icon: SiCplusplus },
+    { name: "ROS 2", icon: SiRos },
+    { name: "OpenCV", icon: SiOpencv },
+    { name: "CUDA", icon: SiNvidia },
+    { name: "TypeScript", icon: SiTypescript },
+    { name: "React", icon: SiReact },
+    { name: "Next.js", icon: SiNextdotjs },
+    { name: "TailwindCSS", icon: SiTailwindcss },
+    { name: "PostgreSQL", icon: SiPostgresql },
+  ];
+
+  // Quadruple the array for a completely seamless ultra-wide screen loop
+  const infiniteStack = [...techStack, ...techStack, ...techStack, ...techStack];
+
+  return (
+    <div className="relative w-full py-16 overflow-hidden bg-black/60 border-y border-white/10 backdrop-blur-2xl z-10 flex items-center shadow-[0_0_50px_rgba(0,0,0,0.8)]">
+      {/* CSS Mask for a premium glowing fade on the edges */}
+      <div 
+        className="absolute inset-0 z-20 pointer-events-none"
+        style={{ background: 'linear-gradient(to right, #000 0%, transparent 15%, transparent 85%, #000 100%)' }}
+      />
+      
+      <motion.div
+        className="flex whitespace-nowrap items-center gap-16 w-max opacity-80 hover:opacity-100 transition-opacity duration-500"
+        animate={{ x: ["0%", "-25%"] }}
+        transition={{ repeat: Infinity, ease: "linear", duration: 45 }}
+      >
+        {infiniteStack.map((tech, index) => {
+          const Icon = tech.icon;
+          return (
+            <div key={index} className="flex items-center gap-4 text-white/40 hover:text-cyan-400 transition-colors duration-300">
+              <Icon size={40} className="drop-shadow-lg" />
+              <span className="text-2xl font-black uppercase tracking-[0.2em]">{tech.name}</span>
+            </div>
+          );
+        })}
+      </motion.div>
+    </div>
+  );
+}
+
 function Contact() {
   return (
-    <section id="contact" className="py-32 px-6 relative z-10 bg-black/40 backdrop-blur-sm border-t border-white/10">
-      <div className="max-w-4xl mx-auto text-center">
-        <div className="text-cyan-400 text-xs font-mono tracking-widest mb-4 uppercase">Initiate Connection</div>
-        <h2 className="text-4xl md:text-6xl font-bold uppercase tracking-tight text-white mb-8">
+    <section id="contact" className="py-40 px-6 relative z-10 bg-gradient-to-t from-black to-black/40 backdrop-blur-md">
+      <motion.div 
+        initial={{ opacity: 0, scale: 0.95 }}
+        whileInView={{ opacity: 1, scale: 1 }}
+        viewport={{ once: true }}
+        transition={{ duration: 1, ease: "easeOut" }}
+        className="max-w-4xl mx-auto text-center"
+      >
+        <div className="inline-block px-4 py-1.5 rounded-full border border-cyan-400/30 bg-cyan-400/5 text-cyan-400 text-[10px] font-mono tracking-[0.3em] mb-8 uppercase drop-shadow-[0_0_10px_rgba(34,211,238,0.5)]">
+          Initiate Connection
+        </div>
+        <h2 className="text-6xl md:text-8xl font-black uppercase tracking-tighter text-white mb-10 drop-shadow-2xl">
           Contact <span className="text-cyan-400">Us</span>
         </h2>
-        <p className="text-lg text-white/60 mb-10 max-w-xl mx-auto">
+        <p className="text-xl text-white/60 mb-14 max-w-2xl mx-auto leading-relaxed">
           Currently exploring new opportunities in AI, computer vision, and full-stack engineering. 
           Whether you have a question, want to discuss a venture, or just want to say hi, my inbox is open.
         </p>
-        <a href="mailto:contact@example.com" className="inline-flex items-center gap-3 px-8 py-4 bg-cyan-400 text-black font-bold uppercase tracking-widest text-xs rounded-full hover:bg-white transition-all shadow-[0_0_15px_rgba(34,211,238,0.3)]">
-          <FaEnvelope size={16} /> Send a Message
+        <a href="mailto:contact@example.com" className="inline-flex items-center gap-4 px-12 py-6 bg-cyan-500 text-black font-black uppercase tracking-[0.2em] text-sm rounded-full hover:bg-white transition-all duration-300 shadow-[0_0_40px_rgba(34,211,238,0.4)] hover:scale-105 hover:shadow-[0_0_60px_rgba(255,255,255,0.6)]">
+          <FaEnvelope size={20} /> Send a Message
         </a>
-      </div>
+      </motion.div>
     </section>
   );
 }
 
 export function Portfolio() {
   return (
-    <main className="relative min-h-screen w-full text-white selection:bg-cyan-400/30 font-sans">
-      {/* The 3D background stays as requested */}
+    <main className="relative min-h-screen w-full bg-black text-white selection:bg-cyan-400/30 font-sans overflow-x-hidden">
+      {/* The 3D background stays as requested, rendered once */}
       <Background3D />
       
       {/* Navigation */}
       <Navbar />
       
-      {/* Vertical Sections Restored */}
+      {/* Premium Vertical Sections */}
       <Hero />
       <ExperienceSection />
       <LeadershipSection />
       
       {/* 21 Projects Archive Component */}
-      <div id="projects" className="relative z-10 bg-black/20 pb-20">
+      <div id="projects" className="relative z-10 bg-black/60 pb-32 border-y border-white/5 backdrop-blur-md">
         <ProjectArchive />
       </div>
 
-      {/* Moved Tech Stack Ribbon to the bottom */}
+      {/* Upgraded Tech Stack Ribbon */}
       <TechStackMarquee />
 
       <Contact />
