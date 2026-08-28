@@ -3,6 +3,7 @@
 import { Background3D } from "./Background3D";
 import { projects } from "@/lib/projects";
 import { FaGithub, FaLinkedinIn, FaEnvelope, FaArrowRight } from "react-icons/fa6";
+import { SiPython, SiCplusplus, SiRos, SiOpencv, SiNvidia, SiReact, SiNextdotjs, SiPostgresql, SiTailwindcss, SiTypescript } from "react-icons/si";
 import { motion } from "framer-motion";
 import ProjectArchive from "./ProjectArchive";
 import LucyChat from "./LucyChat";
@@ -53,6 +54,47 @@ function Hero() {
         </div>
       </motion.div>
     </section>
+  );
+}
+
+function TechStackMarquee() {
+  const techStack = [
+    { name: "Python", icon: SiPython },
+    { name: "C++", icon: SiCplusplus },
+    { name: "ROS 2", icon: SiRos },
+    { name: "OpenCV", icon: SiOpencv },
+    { name: "CUDA", icon: SiNvidia },
+    { name: "TypeScript", icon: SiTypescript },
+    { name: "React", icon: SiReact },
+    { name: "Next.js", icon: SiNextdotjs },
+    { name: "TailwindCSS", icon: SiTailwindcss },
+    { name: "PostgreSQL", icon: SiPostgresql },
+  ];
+
+  // Duplicate the array to create a seamless infinite loop
+  const infiniteStack = [...techStack, ...techStack];
+
+  return (
+    <div className="relative w-full py-10 overflow-hidden bg-black/40 border-y border-white/10 backdrop-blur-sm z-10 flex items-center">
+      <div className="absolute left-0 w-24 h-full bg-gradient-to-r from-black to-transparent z-20 pointer-events-none"></div>
+      <div className="absolute right-0 w-24 h-full bg-gradient-to-l from-black to-transparent z-20 pointer-events-none"></div>
+      
+      <motion.div
+        className="flex whitespace-nowrap items-center gap-12 w-max"
+        animate={{ x: ["0%", "-50%"] }}
+        transition={{ repeat: Infinity, ease: "linear", duration: 30 }}
+      >
+        {infiniteStack.map((tech, index) => {
+          const Icon = tech.icon;
+          return (
+            <div key={index} className="flex items-center gap-3 text-white/50 hover:text-cyan-400 transition-colors">
+              <Icon size={24} />
+              <span className="text-xl font-bold uppercase tracking-widest">{tech.name}</span>
+            </div>
+          );
+        })}
+      </motion.div>
+    </div>
   );
 }
 
@@ -141,6 +183,7 @@ export function Portfolio() {
       
       {/* Vertical Sections Restored */}
       <Hero />
+      <TechStackMarquee />
       <ExperienceSection />
       
       {/* 21 Projects Archive Component */}
