@@ -5,6 +5,7 @@ import { projects } from "@/lib/projects";
 import { FaGithub, FaLinkedinIn, FaEnvelope, FaArrowRight } from "react-icons/fa6";
 import { SiPython, SiCplusplus, SiRos, SiOpencv, SiNvidia, SiReact, SiNextdotjs, SiPostgresql, SiTailwindcss, SiTypescript } from "react-icons/si";
 import { motion } from "framer-motion";
+import Image from "next/image";
 import ProjectArchive from "./ProjectArchive";
 import LucyChat from "./LucyChat";
 import ExperienceCanvas from "./ExperienceCanvas";
@@ -29,13 +30,22 @@ function Navbar() {
 
 function Hero() {
   return (
-    <section id="about" className="min-h-screen flex flex-col items-center justify-center pt-20 px-6 relative z-10 text-center">
+    <section id="about" className="min-h-screen flex flex-col items-center justify-center pt-24 px-6 relative z-10 text-center">
       <motion.div
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, ease: "easeOut" }}
-        className="max-w-4xl bg-black/20 p-8 md:p-12 rounded-3xl backdrop-blur-sm border border-white/5"
+        className="max-w-4xl bg-black/20 p-8 md:p-12 rounded-3xl backdrop-blur-sm border border-white/5 flex flex-col items-center"
       >
+        <div className="relative w-32 h-32 md:w-40 md:h-40 mb-8 rounded-full overflow-hidden border-2 border-cyan-400 shadow-[0_0_30px_rgba(34,211,238,0.3)]">
+          <Image 
+            src="/images/anant-reference.jpg" 
+            alt="Anant Hejib" 
+            fill 
+            className="object-cover"
+            priority
+          />
+        </div>
         <div className="text-cyan-400 text-xs font-mono tracking-widest mb-6 uppercase">Engineering Profile</div>
         <h1 className="text-5xl md:text-8xl font-black uppercase tracking-tighter text-white mb-6 drop-shadow-2xl">
           Anant <span className="text-cyan-400">Hejib</span>
@@ -152,6 +162,36 @@ function ExperienceSection() {
   );
 }
 
+function LeadershipSection() {
+  const roles = [
+    { title: "Techroots", role: "Co-founder" },
+    { title: "Student Innovation Council", role: "Founder & Chairperson" },
+    { title: "Institutions Innovation Council", role: "Board Member" },
+    { title: "Sinhgad Capture Crew", role: "Videographer" },
+    { title: "ACES", role: "Photography Team Lead" },
+  ];
+
+  return (
+    <section id="leadership" className="relative py-20 px-6 z-10 bg-black/40 border-b border-white/10 backdrop-blur-sm">
+      <div className="max-w-5xl mx-auto">
+        <div className="text-cyan-400 text-xs font-mono tracking-widest mb-4 uppercase text-center md:text-left">Beyond Engineering</div>
+        <h2 className="text-4xl md:text-5xl font-bold uppercase tracking-tight text-white mb-12 text-center md:text-left">
+          Leadership <span className="text-cyan-400">&</span> Clubs
+        </h2>
+        
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {roles.map((item, index) => (
+            <div key={index} className="p-6 bg-black/40 border border-white/10 rounded-2xl hover:border-cyan-400/50 transition-colors group">
+              <h3 className="text-xl font-bold text-white mb-2 group-hover:text-cyan-400 transition-colors">{item.title}</h3>
+              <p className="text-white/60 font-mono text-sm tracking-wide">{item.role}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
 function Contact() {
   return (
     <section id="contact" className="py-32 px-6 relative z-10 bg-black/40 backdrop-blur-sm border-t border-white/10">
@@ -185,6 +225,7 @@ export function Portfolio() {
       <Hero />
       <TechStackMarquee />
       <ExperienceSection />
+      <LeadershipSection />
       
       {/* 21 Projects Archive Component */}
       <div id="projects" className="relative z-10 bg-black/20 pb-20">
