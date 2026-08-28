@@ -1,0 +1,83 @@
+ ⚠ Cross origin request detected from 127.0.0.1 to /_next/* resource. In a future major version of Next.js, you will need to explicitly configure "allowedDevOrigins" in next.config to allow this.
+Read more: https://nextjs.org/docs/app/api-reference/config/next-config-js/allowedDevOrigins
+ ⨯ ./components/Portfolio.tsx:13:1
+Module not found: Can't resolve './LucyChat'
+[0m [90m 11 |[39m [36mimport[39m { projects [36mas[39m caseStudies } [36mfrom[39m [32m"@/lib/projects"[39m[33m;[39m
+ [90m 12 |[39m [36mimport[39m [33mProjectArchive[39m [36mfrom[39m [32m"./ProjectArchive"[39m[33m;[39m
+[31m[1m>[22m[39m[90m 13 |[39m [36mimport[39m [33mLucyChat[39m [36mfrom[39m [32m"./LucyChat"[39m[33m;[39m
+ [90m    |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 14 |[39m
+ [90m 15 |[39m [36mconst[39m [33mExperienceCanvas[39m [33m=[39m dynamic(() [33m=>[39m [36mimport[39m([32m"./ExperienceCanvas"[39m)[33m,[39m { ssr[33m:[39m [36mfalse[39m })[33m;[39m
+ [90m 16 |[39m[0m
+
+
+
+Import trace:
+  Server Component:
+    ./components/Portfolio.tsx
+    ./app/page.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+ ⨯ ./components/Portfolio.tsx:13:1
+Module not found: Can't resolve './LucyChat'
+[0m [90m 11 |[39m [36mimport[39m { projects [36mas[39m caseStudies } [36mfrom[39m [32m"@/lib/projects"[39m[33m;[39m
+ [90m 12 |[39m [36mimport[39m [33mProjectArchive[39m [36mfrom[39m [32m"./ProjectArchive"[39m[33m;[39m
+[31m[1m>[22m[39m[90m 13 |[39m [36mimport[39m [33mLucyChat[39m [36mfrom[39m [32m"./LucyChat"[39m[33m;[39m
+ [90m    |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 14 |[39m
+ [90m 15 |[39m [36mconst[39m [33mExperienceCanvas[39m [33m=[39m dynamic(() [33m=>[39m [36mimport[39m([32m"./ExperienceCanvas"[39m)[33m,[39m { ssr[33m:[39m [36mfalse[39m })[33m;[39m
+ [90m 16 |[39m[0m
+
+
+
+Import trace:
+  Server Component:
+    ./components/Portfolio.tsx
+    ./app/page.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+ ⨯ ./components/Portfolio.tsx:13:1
+Module not found: Can't resolve './LucyChat'
+[0m [90m 11 |[39m [36mimport[39m { projects [36mas[39m caseStudies } [36mfrom[39m [32m"@/lib/projects"[39m[33m;[39m
+ [90m 12 |[39m [36mimport[39m [33mProjectArchive[39m [36mfrom[39m [32m"./ProjectArchive"[39m[33m;[39m
+[31m[1m>[22m[39m[90m 13 |[39m [36mimport[39m [33mLucyChat[39m [36mfrom[39m [32m"./LucyChat"[39m[33m;[39m
+ [90m    |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 14 |[39m
+ [90m 15 |[39m [36mconst[39m [33mExperienceCanvas[39m [33m=[39m dynamic(() [33m=>[39m [36mimport[39m([32m"./ExperienceCanvas"[39m)[33m,[39m { ssr[33m:[39m [36mfalse[39m })[33m;[39m
+ [90m 16 |[39m[0m
+
+
+
+Import trace:
+  Server Component:
+    ./components/Portfolio.tsx
+    ./app/page.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+ ⨯ ./components/Portfolio.tsx:13:1
+Module not found: Can't resolve './LucyChat'
+[0m [90m 11 |[39m [36mimport[39m { projects [36mas[39m caseStudies } [36mfrom[39m [32m"@/lib/projects"[39m[33m;[39m
+ [90m 12 |[39m [36mimport[39m [33mProjectArchive[39m [36mfrom[39m [32m"./ProjectArchive"[39m[33m;[39m
+[31m[1m>[22m[39m[90m 13 |[39m [36mimport[39m [33mLucyChat[39m [36mfrom[39m [32m"./LucyChat"[39m[33m;[39m
+ [90m    |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 14 |[39m
+ [90m 15 |[39m [36mconst[39m [33mExperienceCanvas[39m [33m=[39m dynamic(() [33m=>[39m [36mimport[39m([32m"./ExperienceCanvas"[39m)[33m,[39m { ssr[33m:[39m [36mfalse[39m })[33m;[39m
+ [90m 16 |[39m[0m
+
+
+
+Import trace:
+  Server Component:
+    ./components/Portfolio.tsx
+    ./app/page.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+SMTP rejected contact notification: connect EACCES 192.178.211.109:465

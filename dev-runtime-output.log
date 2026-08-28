@@ -1,0 +1,26 @@
+
+> anant-hejib-portfolio@1.0.0 dev
+> npm run clean && next dev --turbopack --port 3000
+
+
+> anant-hejib-portfolio@1.0.0 clean
+> node scripts/clean-next.mjs
+
+Cleared generated Next.js cache.
+   ▲ Next.js 15.5.22 (Turbopack)
+   - Local:        http://localhost:3000
+   - Network:      http://172.19.223.103:3000
+   - Environments: .env.local
+
+ ✓ Starting...
+Creating turbopack project {
+  dir: 'C:\\Users\\User\\Desktop\\my portfolio webstei',
+  testMode: true
+}
+ ✓ Ready in 3.9s
+ ○ Compiling / ...
+ ✓ Compiled / in 11.7s
+ GET / 200 in 14657ms
+ ○ Compiling /icon.svg ...
+ ✓ Compiled /icon.svg in 1541ms
+ GET /icon.svg?icon.efec15f6.svg 200 in 2345ms

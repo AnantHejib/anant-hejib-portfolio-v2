@@ -1,0 +1,195 @@
+
+> anant-hejib-portfolio@1.0.0 dev
+> npm run clean && next dev --turbopack --port 3000
+
+
+> anant-hejib-portfolio@1.0.0 clean
+> node scripts/clean-next.mjs
+
+Cleared generated Next.js cache.
+   ▲ Next.js 15.5.22 (Turbopack)
+   - Local:        http://localhost:3000
+   - Network:      http://172.19.223.103:3000
+   - Environments: .env.local
+
+ ✓ Starting...
+Creating turbopack project {
+  dir: 'C:\\Users\\User\\Desktop\\my portfolio webstei',
+  testMode: true
+}
+ ✓ Ready in 5s
+ ○ Compiling / ...
+ ✓ Compiled / in 12.7s
+ GET / 200 in 15782ms
+ GET / 200 in 15706ms
+ ○ Compiling /api/contact ...
+ ✓ Compiled /api/contact in 937ms
+ GET /api/contact 405 in 1487ms
+ ○ Compiling /api/lucy ...
+ ✓ Compiled /api/lucy in 799ms
+ GET /api/lucy 405 in 999ms
+ GET /icon.svg?icon.efec15f6.svg 200 in 1418ms
+ GET / 200 in 1625ms
+ GET / 200 in 872ms
+ GET /icon.svg?icon.efec15f6.svg 200 in 482ms
+ GET / 200 in 1085ms
+ GET /icon.svg?icon.efec15f6.svg 200 in 491ms
+ ✓ Compiled in 588ms
+ GET / 200 in 1657ms
+ GET / 200 in 1151ms
+ GET /icon.svg?icon.efec15f6.svg 200 in 538ms
+ GET / 200 in 1801ms
+ GET /icon.svg?icon.efec15f6.svg 200 in 573ms
+ ✓ Compiled in 431ms
+ ✓ Compiled in 452ms
+ ✓ Compiled in 427ms
+ ✓ Compiled in 1034ms
+ ✓ Compiled in 402ms
+ ✓ Compiled in 939ms
+ ✓ Compiled in 901ms
+ ✓ Compiled in 640ms
+ ✓ Compiled in 363ms
+ ✓ Compiled in 827ms
+ GET / 200 in 2477ms
+ GET /icon.svg?icon.efec15f6.svg 200 in 555ms
+ GET / 200 in 1135ms
+ GET /icon.svg?icon.efec15f6.svg 200 in 754ms
+ GET / 200 in 2144ms
+ GET /icon.svg?icon.efec15f6.svg 200 in 971ms
+ GET /icon.svg?icon.efec15f6.svg 200 in 497ms
+ POST /api/lucy 200 in 533ms
+ GET / 200 in 1065ms
+ GET /icon.svg?icon.efec15f6.svg 200 in 513ms
+ GET /icon.svg?icon.efec15f6.svg 200 in 582ms
+ ✓ Compiled in 473ms
+ GET / 200 in 5771ms
+ ✓ Compiled in 405ms
+ ✓ Compiled in 716ms
+ ✓ Compiled / in 189ms
+ GET / 200 in 1656ms
+ GET /icon.svg?icon.efec15f6.svg 200 in 770ms
+ GET /icon.svg?icon.efec15f6.svg 200 in 705ms
+ POST /api/lucy 200 in 666ms
+ POST /api/lucy 200 in 458ms
+ GET / 200 in 3433ms
+ GET / 200 in 3420ms
+ GET / 200 in 7369ms
+ GET /icon.svg?icon.efec15f6.svg 200 in 10114ms
+ GET /icon.svg?icon.efec15f6.svg 200 in 10129ms
+ GET /icon.svg?icon.efec15f6.svg 200 in 7961ms
+ POST /api/lucy 200 in 3833ms
+ POST /api/contact 200 in 21776ms
+ GET / 200 in 13245ms
+ GET / 200 in 13233ms
+ GET / 200 in 15745ms
+ GET / 200 in 3854ms
+ GET /icon.svg?icon.efec15f6.svg 200 in 508ms
+ GET / 200 in 2099ms
+ GET /icon.svg?icon.efec15f6.svg 200 in 717ms
+ GET /icon.svg?icon.efec15f6.svg 200 in 744ms
+ GET / 200 in 2557ms
+ GET /icon.svg?icon.efec15f6.svg 200 in 758ms
+ GET / 200 in 2670ms
+ GET /icon.svg?icon.efec15f6.svg 200 in 646ms
+ GET / 200 in 1521ms
+ GET /icon.svg?icon.efec15f6.svg 200 in 424ms
+ ✓ Compiled in 449ms
+ ✓ Compiled in 372ms
+ GET / 200 in 1862ms
+ GET /icon.svg?icon.efec15f6.svg 200 in 581ms
+ POST /api/lucy 200 in 2516ms
+ GET / 200 in 5972ms
+ GET / 200 in 8821ms
+ GET /icon.svg?icon.efec15f6.svg 200 in 769ms
+ GET /icon.svg?icon.efec15f6.svg 200 in 655ms
+ GET / 200 in 1255ms
+ GET /icon.svg?icon.efec15f6.svg 200 in 852ms
+ GET / 200 in 1563ms
+ GET /icon.svg?icon.efec15f6.svg 200 in 568ms
+ POST /api/lucy 200 in 716ms
+ GET / 200 in 3508ms
+ GET /icon.svg?icon.efec15f6.svg 200 in 597ms
+ GET / 200 in 3140ms
+ GET / 200 in 4317ms
+ GET /icon.svg?icon.efec15f6.svg 200 in 750ms
+ GET /icon.svg?icon.efec15f6.svg 200 in 765ms
+ POST /api/lucy 200 in 703ms
+ GET / 200 in 3635ms
+ GET /icon.svg?icon.efec15f6.svg 200 in 1566ms
+ GET / 200 in 4133ms
+ GET /icon.svg?icon.efec15f6.svg 200 in 523ms
+ GET / 200 in 2966ms
+ GET /icon.svg?icon.efec15f6.svg 200 in 1476ms
+ GET / 200 in 2503ms
+ GET /icon.svg?icon.efec15f6.svg 200 in 1298ms
+ GET / 200 in 4549ms
+ GET /icon.svg?icon.efec15f6.svg 200 in 545ms
+ ✓ Compiled in 364ms
+ ✓ Compiled in 1088ms
+ GET / 200 in 3957ms
+ GET /icon.svg?icon.efec15f6.svg 200 in 609ms
+ ✓ Compiled in 1885ms
+ ✓ Compiled in 978ms
+ GET / 200 in 1902ms
+ GET / 200 in 459ms
+ GET / 200 in 1154ms
+ GET / 200 in 363ms
+ ✓ Compiled in 740ms
+ ✓ Compiled in 998ms
+ GET / 200 in 2561ms
+ GET /icon.svg?icon.efec15f6.svg 200 in 1326ms
+ GET / 200 in 2177ms
+ GET /icon.svg?icon.efec15f6.svg 200 in 1144ms
+ GET / 200 in 3222ms
+ GET /icon.svg?icon.efec15f6.svg 200 in 724ms
+ GET / 200 in 1369ms
+ GET /icon.svg?icon.efec15f6.svg 200 in 565ms
+ POST /api/contact 400 in 659ms
+ POST /api/contact 200 in 597ms
+ GET / 200 in 1058ms
+ GET /icon.svg?icon.efec15f6.svg 200 in 514ms
+ GET / 200 in 1481ms
+ GET /icon.svg?icon.efec15f6.svg 200 in 1248ms
+ GET / 200 in 1395ms
+ GET /icon.svg?icon.efec15f6.svg 200 in 519ms
+ GET / 200 in 1625ms
+ GET /icon.svg?icon.efec15f6.svg 200 in 592ms
+ GET / 200 in 3439ms
+ GET /icon.svg?icon.efec15f6.svg 200 in 878ms
+ GET / 200 in 1787ms
+ ✓ Compiled in 976ms
+ ✓ Compiled in 1053ms
+ GET / 200 in 2839ms
+ GET /icon.svg?icon.efec15f6.svg 200 in 737ms
+ GET / 200 in 2794ms
+ GET /icon.svg?icon.efec15f6.svg 200 in 1112ms
+ ✓ Compiled in 876ms
+ GET / 200 in 2500ms
+ GET /icon.svg?icon.efec15f6.svg 200 in 545ms
+ ✓ Compiled in 1214ms
+ ✓ Compiled in 1185ms
+ GET / 200 in 1169ms
+ GET /icon.svg?icon.efec15f6.svg 200 in 527ms
+ GET / 200 in 1385ms
+ GET /icon.svg?icon.efec15f6.svg 200 in 555ms
+ GET / 200 in 1396ms
+ GET /icon.svg?icon.efec15f6.svg 200 in 505ms
+ GET / 200 in 2110ms
+ GET /icon.svg?icon.efec15f6.svg 200 in 555ms
+ GET / 200 in 2025ms
+ GET /icon.svg?icon.efec15f6.svg 200 in 918ms
+ GET / 200 in 1881ms
+ GET /icon.svg?icon.efec15f6.svg 200 in 671ms
+ GET / 200 in 2145ms
+ GET /icon.svg?icon.efec15f6.svg 200 in 636ms
+ GET / 200 in 4028ms
+ GET /icon.svg?icon.efec15f6.svg 200 in 620ms
+ ✓ Compiled in 362ms
+ ✓ Compiled in 713ms
+ ✓ Compiled in 366ms
+ ✓ Compiled in 949ms
+ GET / 200 in 3328ms
+ GET /icon.svg?icon.efec15f6.svg 200 in 672ms
+ GET / 200 in 1116ms
+ GET /icon.svg?icon.efec15f6.svg 200 in 603ms
+[?25h

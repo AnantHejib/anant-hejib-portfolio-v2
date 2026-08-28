@@ -1,0 +1,28 @@
+import { chromium } from "playwright-core";
+import { readFile } from "node:fs/promises";
+import { pathToFileURL } from "node:url";
+import path from "node:path";
+
+const root=process.cwd();
+const onePage=process.argv.includes("--one-page");
+const ats=process.argv.includes("--ats");
+const stem=onePage?"anant-hejib-one-page-resume":ats?"anant-hejib-ats-resume":"anant-hejib-resume";
+const outputName=onePage?"Anant-Hejib-One-Page-Resume":ats?"Anant-Hejib-ATS-Resume":"Anant-Hejib-Resume";
+const htmlPath=path.join(root,"deliverables",`${stem}.html`);
+const pdfPath=path.join(root,"deliverables",`${outputName}.pdf`);
+const browser=await chromium.launch({headless:true,executablePath:"C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe"});
+const page=await browser.newPage({viewport:{width:1280,height:900},deviceScaleFactor:1});
+await page.goto(pathToFileURL(htmlPath).href,{waitUntil:"load"});
+await page.emulateMedia({media:"print"});
+const layout=await page.evaluate(()=>[...document.querySelectorAll(".page")].map((node,index)=>({page:index+1,clientHeight:node.clientHeight,scrollHeight:node.scrollHeight,overflow:node.scrollHeight-node.clientHeight})));
+const expectedPages=onePage?1:2;
+if(layout.length!==expectedPages||layout.some((item)=>item.overflow>0)) throw new Error(`Resume layout is not exactly ${expectedPages} clean page(s): ${JSON.stringify(layout)}`);
+const previewPrefix=onePage?"one-page-resume-preview":ats?"ats-resume-preview":"resume-preview";
+await page.locator(".page").nth(0).screenshot({path:path.join(root,"deliverables",`${previewPrefix}-page-1.png`)});
+if(!onePage) await page.locator(".page").nth(1).screenshot({path:path.join(root,"deliverables",`${previewPrefix}-page-2.png`)});
+await page.pdf({path:pdfPath,format:"A4",printBackground:true,preferCSSPageSize:true,margin:{top:"0",right:"0",bottom:"0",left:"0"}});
+await browser.close();
+const bytes=await readFile(pdfPath);
+const pageMarkers=(bytes.toString("latin1").match(/\/Type\s*\/Page\b/g)||[]).length;
+if(pageMarkers!==expectedPages) throw new Error(`Expected a ${expectedPages}-page PDF, found ${pageMarkers} page objects.`);
+console.log(JSON.stringify({pdf:pdfPath,pages:pageMarkers,layout},null,2));
