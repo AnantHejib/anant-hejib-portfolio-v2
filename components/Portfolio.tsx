@@ -163,30 +163,55 @@ function ExperienceSection() {
 }
 
 function LeadershipSection() {
-  const roles = [
-    { title: "Techroots", role: "Co-founder" },
-    { title: "Student Innovation Council", role: "Founder & Chairperson" },
-    { title: "Institutions Innovation Council", role: "Board Member" },
-    { title: "Sinhgad Capture Crew", role: "Videographer" },
-    { title: "ACES", role: "Photography Team Lead" },
+  const companies = [
+    { title: "Techroots", role: "Co-founder", description: "Co-founded a technology company focused on delivering innovative software solutions and driving technical strategy from the ground up." },
+  ];
+
+  const clubs = [
+    { title: "Student Innovation Council", role: "Founder & Chairperson", description: "Established the council to foster a culture of innovation and guide student-led technical projects." },
+    { title: "Institutions Innovation Council", role: "Board Member", description: "Served on the board to strategize and oversee campus-wide technical and entrepreneurial initiatives." },
+    { title: "Sinhgad Capture Crew", role: "Videographer", description: "Directed and captured high-quality video content for major institutional events and technical fests." },
+    { title: "ACES", role: "Photography Team Lead", description: "Led a team of photographers to visually document technical symposiums and student activities." },
   ];
 
   return (
     <section id="leadership" className="relative py-20 px-6 z-10 bg-black/40 border-b border-white/10 backdrop-blur-sm">
       <div className="max-w-5xl mx-auto">
-        <div className="text-cyan-400 text-xs font-mono tracking-widest mb-4 uppercase text-center md:text-left">Beyond Engineering</div>
-        <h2 className="text-4xl md:text-5xl font-bold uppercase tracking-tight text-white mb-12 text-center md:text-left">
-          Leadership <span className="text-cyan-400">&</span> Clubs
-        </h2>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {roles.map((item, index) => (
-            <div key={index} className="p-6 bg-black/40 border border-white/10 rounded-2xl hover:border-cyan-400/50 transition-colors group">
-              <h3 className="text-xl font-bold text-white mb-2 group-hover:text-cyan-400 transition-colors">{item.title}</h3>
-              <p className="text-white/60 font-mono text-sm tracking-wide">{item.role}</p>
-            </div>
-          ))}
+        {/* Companies Section */}
+        <div className="mb-16">
+          <div className="text-cyan-400 text-xs font-mono tracking-widest mb-4 uppercase text-center md:text-left">Entrepreneurship</div>
+          <h2 className="text-4xl md:text-5xl font-bold uppercase tracking-tight text-white mb-8 text-center md:text-left">
+            My <span className="text-cyan-400">Company</span>
+          </h2>
+          <div className="grid grid-cols-1 gap-6">
+            {companies.map((item, index) => (
+              <div key={index} className="p-6 md:p-8 bg-black/40 border border-white/10 rounded-2xl hover:border-cyan-400/50 transition-colors group">
+                <h3 className="text-2xl font-bold text-white mb-2 group-hover:text-cyan-400 transition-colors">{item.title}</h3>
+                <p className="text-cyan-400 font-mono text-sm tracking-wide mb-4">{item.role}</p>
+                <p className="text-white/60 leading-relaxed">{item.description}</p>
+              </div>
+            ))}
+          </div>
         </div>
+
+        {/* Clubs Section */}
+        <div>
+          <div className="text-cyan-400 text-xs font-mono tracking-widest mb-4 uppercase text-center md:text-left">Beyond Engineering</div>
+          <h2 className="text-4xl md:text-5xl font-bold uppercase tracking-tight text-white mb-8 text-center md:text-left">
+            Clubs <span className="text-cyan-400">&</span> Extracurriculars
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {clubs.map((item, index) => (
+              <div key={index} className="p-6 bg-black/40 border border-white/10 rounded-2xl hover:border-cyan-400/50 transition-colors group">
+                <h3 className="text-xl font-bold text-white mb-2 group-hover:text-cyan-400 transition-colors">{item.title}</h3>
+                <p className="text-cyan-400 font-mono text-sm tracking-wide mb-3">{item.role}</p>
+                <p className="text-white/50 text-sm leading-relaxed">{item.description}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+        
       </div>
     </section>
   );
@@ -223,7 +248,6 @@ export function Portfolio() {
       
       {/* Vertical Sections Restored */}
       <Hero />
-      <TechStackMarquee />
       <ExperienceSection />
       <LeadershipSection />
       
@@ -231,6 +255,9 @@ export function Portfolio() {
       <div id="projects" className="relative z-10 bg-black/20 pb-20">
         <ProjectArchive />
       </div>
+
+      {/* Moved Tech Stack Ribbon to the bottom */}
+      <TechStackMarquee />
 
       <Contact />
       
