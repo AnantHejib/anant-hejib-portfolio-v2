@@ -4,12 +4,12 @@ import { Background3D } from "./Background3D";
 import { projects } from "@/lib/projects";
 import { FaGithub, FaLinkedinIn, FaEnvelope, FaArrowRight } from "react-icons/fa6";
 import { SiPython, SiCplusplus, SiRos, SiOpencv, SiNvidia, SiReact, SiNextdotjs, SiPostgresql, SiTailwindcss, SiTypescript } from "react-icons/si";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import ProjectArchive from "./ProjectArchive";
 import LucyChat from "./LucyChat";
 import ExperienceCanvas from "./ExperienceCanvas";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 
 function Navbar() {
   return (
@@ -336,8 +336,42 @@ function Contact() {
 }
 
 export function Portfolio() {
+  const [entered, setEntered] = useState(false);
+  const audioRef = useRef<HTMLAudioElement>(null);
+
+  const handleEnter = () => {
+    setEntered(true);
+    if (audioRef.current) {
+      audioRef.current.volume = 0.4;
+      audioRef.current.play().catch((err) => console.log("Audio playback failed:", err));
+    }
+  };
+
   return (
     <main className="relative min-h-screen w-full bg-black text-white selection:bg-cyan-400/30 font-sans overflow-x-hidden">
+      {/* Startup Overlay for Audio Policy */}
+      <AnimatePresence>
+        {!entered && (
+          <motion.div 
+            className="fixed inset-0 z-[100] bg-black flex flex-col items-center justify-center"
+            exit={{ opacity: 0, scale: 1.05 }}
+            transition={{ duration: 1, ease: "easeInOut" }}
+          >
+            <div className="text-cyan-400 text-xs font-mono tracking-[0.5em] mb-8 uppercase animate-pulse">System Ready</div>
+            <button 
+              onClick={handleEnter}
+              className="group relative px-12 py-5 bg-transparent border-2 border-cyan-500/30 text-white font-black uppercase tracking-[0.3em] text-sm overflow-hidden transition-all hover:border-cyan-400 hover:shadow-[0_0_40px_rgba(34,211,238,0.4)]"
+            >
+              <div className="absolute inset-0 bg-cyan-500 w-0 group-hover:w-full transition-all duration-500 ease-out z-0"></div>
+              <span className="relative z-10 group-hover:text-black transition-colors duration-500">Initialize Experience</span>
+            </button>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Hidden Audio Element */}
+      <audio ref={audioRef} src="/audio/back-in-black.mp3" loop />
+
       {/* The 3D background stays as requested, rendered once */}
       <Background3D />
       
