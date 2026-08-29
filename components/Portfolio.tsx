@@ -308,28 +308,173 @@ function TechStackMarquee() {
 }
 
 function Contact() {
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    organization: "",
+    inquiryType: "general",
+    message: "",
+  });
+  const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
+  const [errorMessage, setErrorMessage] = useState("");
+  const [reference, setReference] = useState("");
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setStatus("loading");
+    setErrorMessage("");
+
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await res.json();
+      if (res.ok && data.ok) {
+        setStatus("success");
+        setReference(data.reference || "");
+        setFormData({ name: "", email: "", organization: "", inquiryType: "general", message: "" });
+      } else {
+        setStatus("error");
+        setErrorMessage(data.error || "Failed to deliver message. Please try again.");
+      }
+    } catch (err) {
+      setStatus("error");
+      setErrorMessage("Network error occurred. Please try again.");
+    }
+  };
+
   return (
-    <section id="contact" className="py-40 px-6 relative z-10 bg-gradient-to-t from-black to-black/40 backdrop-blur-md">
+    <section id="contact" className="py-32 px-6 relative z-10 bg-[#05080d]/90 backdrop-blur-2xl border-t border-[#183642]">
       <motion.div 
-        initial={{ opacity: 0, scale: 0.95 }}
-        whileInView={{ opacity: 1, scale: 1 }}
+        initial={{ opacity: 0, y: 40 }}
+        whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
-        transition={{ duration: 1, ease: "easeOut" }}
-        className="max-w-4xl mx-auto text-center"
+        transition={{ duration: 0.8, ease: "easeOut" }}
+        className="max-w-4xl mx-auto"
       >
-        <div className="inline-block px-4 py-1.5 rounded-full border border-cyan-400/30 bg-cyan-400/5 text-cyan-400 text-[10px] font-mono tracking-[0.3em] mb-8 uppercase drop-shadow-[0_0_10px_rgba(34,211,238,0.5)]">
-          Initiate Connection
+        <div className="text-center mb-12">
+          <div className="inline-block px-3 py-1 rounded border border-[#183642] bg-[#091118] text-[#4fd1e5] text-[11px] font-mono tracking-[0.25em] mb-4 uppercase">
+            SECURE CHANNEL // CONTACT
+          </div>
+          <h2 className="text-4xl md:text-6xl font-black uppercase tracking-tight text-white mb-4">
+            INITIATE <span className="text-[#4fd1e5]">TRANSMISSION.</span>
+          </h2>
+          <p className="text-[#8fa6af] text-sm md:text-base max-w-xl mx-auto font-sans">
+            Direct routing to Anant Hejib via secure SMTP. Automated acknowledgement and response tracking powered by Lucy AI.
+          </p>
         </div>
-        <h2 className="text-6xl md:text-8xl font-black uppercase tracking-tighter text-white mb-10 drop-shadow-2xl">
-          Contact <span className="text-cyan-400">Us</span>
-        </h2>
-        <p className="text-xl text-white/60 mb-14 max-w-2xl mx-auto leading-relaxed">
-          Currently exploring new opportunities in AI, computer vision, and full-stack engineering. 
-          Whether you have a question, want to discuss a venture, or just want to say hi, my inbox is open.
-        </p>
-        <a href="mailto:contact@example.com" className="inline-flex items-center gap-4 px-12 py-6 bg-cyan-500 text-black font-black uppercase tracking-[0.2em] text-sm rounded-full hover:bg-white transition-all duration-300 shadow-[0_0_40px_rgba(34,211,238,0.4)] hover:scale-105 hover:shadow-[0_0_60px_rgba(255,255,255,0.6)]">
-          <FaEnvelope size={20} /> Send a Message
-        </a>
+
+        {status === "success" ? (
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="p-8 md:p-12 bg-[#071016] border border-[#183642] rounded-2xl text-center"
+          >
+            <div className="w-16 h-16 bg-[#4fd1e5]/10 border border-[#4fd1e5]/30 rounded-full flex items-center justify-center mx-auto mb-6 text-[#4fd1e5]">
+              ✓
+            </div>
+            <h3 className="text-2xl font-bold text-white mb-2 uppercase tracking-wide">Transmission Delivered</h3>
+            <p className="text-[#8fa6af] mb-6">Your message was securely dispatched to Anant and Lucy AI.</p>
+            {reference && (
+              <div className="inline-block px-4 py-2 bg-[#091118] border border-[#183642] font-mono text-xs text-[#4fd1e5] tracking-widest rounded mb-8">
+                REFERENCE ID: {reference}
+              </div>
+            )}
+            <div>
+              <button 
+                onClick={() => setStatus("idle")} 
+                className="px-8 py-3 bg-[#4fd1e5] text-[#05080d] font-bold text-xs uppercase tracking-widest rounded hover:bg-white transition-colors"
+              >
+                Send Another Transmission
+              </button>
+            </div>
+          </motion.div>
+        ) : (
+          <form onSubmit={handleSubmit} className="p-8 md:p-12 bg-[#071016]/80 border border-[#183642] rounded-2xl shadow-[0_10px_40px_rgba(0,0,0,0.8)] backdrop-blur-xl">
+            {status === "error" && (
+              <div className="mb-6 p-4 bg-red-500/10 border border-red-500/30 text-red-400 text-xs font-mono rounded">
+                {errorMessage}
+              </div>
+            )}
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+              <div>
+                <label className="block text-[#6f8992] text-[10px] font-mono tracking-widest uppercase mb-2">Full Name *</label>
+                <input 
+                  type="text" 
+                  required
+                  placeholder="Ada Lovelace"
+                  value={formData.name}
+                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                  className="w-full bg-[#091118] border border-[#183642] rounded px-4 py-3 text-white text-sm focus:outline-none focus:border-[#4fd1e5] transition-colors placeholder-[#6f8992]/40"
+                />
+              </div>
+
+              <div>
+                <label className="block text-[#6f8992] text-[10px] font-mono tracking-widest uppercase mb-2">Email Address *</label>
+                <input 
+                  type="email" 
+                  required
+                  placeholder="ada@lovelace.io"
+                  value={formData.email}
+                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                  className="w-full bg-[#091118] border border-[#183642] rounded px-4 py-3 text-white text-sm focus:outline-none focus:border-[#4fd1e5] transition-colors placeholder-[#6f8992]/40"
+                />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+              <div>
+                <label className="block text-[#6f8992] text-[10px] font-mono tracking-widest uppercase mb-2">Organization / Company</label>
+                <input 
+                  type="text" 
+                  placeholder="Deep Tech Labs"
+                  value={formData.organization}
+                  onChange={(e) => setFormData({ ...formData, organization: e.target.value })}
+                  className="w-full bg-[#091118] border border-[#183642] rounded px-4 py-3 text-white text-sm focus:outline-none focus:border-[#4fd1e5] transition-colors placeholder-[#6f8992]/40"
+                />
+              </div>
+
+              <div>
+                <label className="block text-[#6f8992] text-[10px] font-mono tracking-widest uppercase mb-2">Inquiry Classification</label>
+                <select 
+                  value={formData.inquiryType}
+                  onChange={(e) => setFormData({ ...formData, inquiryType: e.target.value })}
+                  className="w-full bg-[#091118] border border-[#183642] rounded px-4 py-3 text-white text-sm focus:outline-none focus:border-[#4fd1e5] transition-colors"
+                >
+                  <option value="general">General Inquiry</option>
+                  <option value="opportunity">Job or Interview Opportunity</option>
+                  <option value="collaboration">Project Collaboration</option>
+                  <option value="technical">Technical Discussion</option>
+                  <option value="speaking">Speaking / Media / Event</option>
+                </select>
+              </div>
+            </div>
+
+            <div className="mb-8">
+              <label className="block text-[#6f8992] text-[10px] font-mono tracking-widest uppercase mb-2">Message *</label>
+              <textarea 
+                rows={5}
+                required
+                placeholder="Briefly describe your objectives, requirements or inquiry..."
+                value={formData.message}
+                onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                className="w-full bg-[#091118] border border-[#183642] rounded px-4 py-3 text-white text-sm focus:outline-none focus:border-[#4fd1e5] transition-colors placeholder-[#6f8992]/40 resize-none"
+              ></textarea>
+            </div>
+
+            <button 
+              type="submit" 
+              disabled={status === "loading"}
+              className="w-full py-4 bg-[#4fd1e5] text-[#05080d] font-bold text-xs uppercase tracking-[0.25em] rounded hover:bg-white transition-all shadow-[0_0_20px_rgba(79,209,229,0.3)] disabled:opacity-50 flex items-center justify-center gap-3 cursor-pointer"
+            >
+              {status === "loading" ? "Dispatched Transmission..." : "Deliver Secure Transmission"}
+            </button>
+          </form>
+        )}
       </motion.div>
     </section>
   );
