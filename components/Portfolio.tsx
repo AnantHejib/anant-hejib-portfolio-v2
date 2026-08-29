@@ -71,7 +71,7 @@ function Hero() {
             Engineering Profile
           </div>
           <h1 className="text-7xl md:text-[9rem] font-black tracking-tighter text-white mb-6 uppercase leading-none drop-shadow-2xl">
-            ANANT <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-600">HEJIB</span>
+            ANANT HEJIB
           </h1>
           <p className="text-xl md:text-2xl text-white/70 max-w-3xl mx-auto leading-relaxed font-light mb-12 drop-shadow-lg">
             AI, Computer Vision, and Robotics Engineer building intelligent, autonomous systems. 

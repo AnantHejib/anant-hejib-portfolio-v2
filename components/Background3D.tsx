@@ -318,6 +318,149 @@ function MovingDigitalTwin() {
   );
 }
 
+const lidarVertexShader = `
+uniform float uTime;
+uniform float uScanProgress;
+
+attribute vec3 aColor;
+varying vec3 vColor;
+varying float vAlpha;
+varying float vHeight;
+
+void main() {
+  vColor = aColor;
+  vHeight = position.y;
+  
+  float distToScan = position.z - uScanProgress;
+  float alpha = 0.05; 
+  
+  if (distToScan < 0.0 && distToScan > -4.0) {
+    alpha = mix(0.8, 0.05, abs(distToScan) / 4.0);
+  } else if (abs(distToScan) < 0.1) {
+    alpha = 1.0;
+  }
+  
+  vAlpha = alpha;
+  vec3 pos = position;
+  pos.y += sin(uTime * 5.0 + position.x * 2.0) * 0.02 * (1.0 - alpha);
+
+  vec4 mvPosition = modelViewMatrix * vec4(pos, 1.0);
+  gl_PointSize = (alpha > 0.8 ? 3.0 : 1.5) * (15.0 / -mvPosition.z);
+  gl_Position = projectionMatrix * mvPosition;
+}
+`;
+
+const lidarFragmentShader = `
+varying vec3 vColor;
+varying float vAlpha;
+varying float vHeight;
+
+void main() {
+  float dist = distance(gl_PointCoord, vec2(0.5));
+  if (dist > 0.5) discard;
+  
+  vec3 bottomColor = vec3(0.0, 1.0, 0.5);
+  vec3 topColor = vec3(0.1, 0.4, 1.0);    
+  vec3 heightColor = mix(bottomColor, topColor, clamp(vHeight / 3.0, 0.0, 1.0));
+  vec3 finalColor = mix(vColor, heightColor, 0.5);
+  
+  gl_FragColor = vec4(finalColor, vAlpha);
+}
+`;
+
+function LiDARRoom() {
+  const shaderRef = useRef<THREE.ShaderMaterial>(null);
+  const groupRef = useRef<THREE.Group>(null);
+
+  const { positions, colors } = useMemo(() => {
+    const pos: number[] = [];
+    const col: number[] = [];
+    
+    const cyan = new THREE.Color("#4fd1e5");
+    const green = new THREE.Color("#00ff88");
+
+    const addPoint = (x: number, y: number, z: number, c: THREE.Color) => {
+      pos.push(x, y, z);
+      const noiseColor = c.clone().multiplyScalar(0.8 + Math.random() * 0.4);
+      col.push(noiseColor.r, noiseColor.g, noiseColor.b);
+    };
+
+    for (let x = -15; x <= 15; x += 0.3) {
+      for (let z = -15; z <= 15; z += 0.3) {
+        if (Math.random() > 0.3) {
+          addPoint(x + (Math.random()-0.5)*0.05, -2 + (Math.random()-0.5)*0.02, z + (Math.random()-0.5)*0.05, cyan);
+        }
+      }
+    }
+
+    const createRack = (cx: number, cz: number, width: number, depth: number, height: number) => {
+      for (let x = cx - width/2; x <= cx + width/2; x += 0.2) {
+        for (let z = cz - depth/2; z <= cz + depth/2; z += 0.2) {
+          for (let y = -2; y <= -2 + height; y += 0.2) {
+            const isEdge = 
+              (x > cx - width/2 + 0.1 && x < cx + width/2 - 0.1) &&
+              (z > cz - depth/2 + 0.1 && z < cz + depth/2 - 0.1) &&
+              (y > -1.9 && y < -2 + height - 0.1);
+            
+            if (!isEdge && Math.random() > 0.2) {
+              addPoint(x, y, z, green);
+            }
+          }
+        }
+      }
+    };
+
+    createRack(-8, -5, 2, 6, 4);
+    createRack(-4, -5, 2, 6, 4);
+    createRack(4, -5, 2, 6, 4);
+    createRack(8, -5, 2, 6, 4);
+
+    return { 
+      positions: new Float32Array(pos), 
+      colors: new Float32Array(col)
+    };
+  }, []);
+
+  const uniforms = useMemo(() => ({
+    uTime: { value: 0 },
+    uScanProgress: { value: -20.0 }
+  }), []);
+
+  useFrame((state, delta) => {
+    const time = state.clock.elapsedTime;
+    
+    if (shaderRef.current) {
+      shaderRef.current.uniforms.uTime.value = time;
+      let progress = shaderRef.current.uniforms.uScanProgress.value;
+      progress += delta * 4.0;
+      if (progress > 20.0) {
+        progress = -20.0; 
+      }
+      shaderRef.current.uniforms.uScanProgress.value = progress;
+    }
+  });
+
+  return (
+    <group ref={groupRef} position={[0, -5, -15]} rotation={[0.2, 0, 0]}>
+      <points>
+        <bufferGeometry>
+          <bufferAttribute attach="attributes-position" args={[positions, 3]} />
+          <bufferAttribute attach="attributes-aColor" args={[colors, 3]} />
+        </bufferGeometry>
+        <shaderMaterial
+          ref={shaderRef}
+          vertexShader={lidarVertexShader}
+          fragmentShader={lidarFragmentShader}
+          uniforms={uniforms}
+          transparent
+          depthWrite={false}
+          blending={THREE.AdditiveBlending}
+        />
+      </points>
+    </group>
+  );
+}
+
 export function Background3D() {
   return (
     <div className="fixed inset-0 z-0 pointer-events-none bg-[#03060a]">
@@ -328,6 +471,9 @@ export function Background3D() {
 
         {/* 1. Interactive Swirling Black Hole Accretion Disk */}
         <BlackHoleAccretionDisk />
+        
+        {/* 1.5 LiDAR Point Cloud Room Scan */}
+        <LiDARRoom />
 
         {/* 2. Deep Cosmic Starfield */}
         <CosmicStarfield />
