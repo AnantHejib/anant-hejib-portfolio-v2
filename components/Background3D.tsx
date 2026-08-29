@@ -131,6 +131,8 @@ function BlackHoleAccretionDisk() {
     uMouse: { value: new THREE.Vector2(0, 0) }
   }), []);
 
+  const targetScale = useRef(1);
+
   useFrame((state) => {
     const time = state.clock.elapsedTime;
     
@@ -142,11 +144,22 @@ function BlackHoleAccretionDisk() {
       shaderRef.current.uniforms.uMouse.value.lerp(mouse, 0.1);
     }
 
+    // Scroll parallax scaling
+    const scrollY = typeof window !== "undefined" ? window.scrollY : 0;
+    const maxScroll = typeof document !== "undefined" ? Math.max(document.body.scrollHeight - window.innerHeight, 1) : 1000;
+    const scrollProgress = Math.min(scrollY / maxScroll, 1.0);
+    
+    // As user scrolls down, the black hole gets significantly larger (up to 3x)
+    targetScale.current = 1.0 + (scrollProgress * 2.0);
+
     // Subtle tilt & gyroscopic rotation of the whole system
     if (ringRef.current) {
       ringRef.current.rotation.x = 1.1 + mouse.y * 0.1;
       ringRef.current.rotation.y = mouse.x * 0.2;
       ringRef.current.rotation.z = time * 0.05;
+      
+      // Smoothly interpolate scale for organic growth
+      ringRef.current.scale.lerp(new THREE.Vector3(targetScale.current, targetScale.current, targetScale.current), 0.03);
     }
   });
 
