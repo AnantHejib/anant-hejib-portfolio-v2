@@ -493,7 +493,7 @@ export function Portfolio() {
   };
 
   return (
-    <main className="relative min-h-screen w-full bg-black text-white selection:bg-cyan-400/30 font-sans overflow-x-hidden">
+    <main className="relative min-h-screen w-full bg-transparent text-white selection:bg-cyan-400/30 font-sans overflow-x-hidden">
       {/* Startup Overlay for Audio Policy */}
       <AnimatePresence>
         {!entered && (
