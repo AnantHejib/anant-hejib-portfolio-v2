@@ -70,8 +70,8 @@ function Hero() {
           <div className="inline-block px-4 py-1.5 rounded-full border border-cyan-400/30 bg-cyan-400/5 text-cyan-400 text-[10px] font-mono tracking-[0.3em] mb-8 uppercase backdrop-blur-md">
             Engineering Profile
           </div>
-          <h1 className="text-6xl md:text-8xl lg:text-9xl font-black uppercase tracking-tighter text-white mb-8 leading-[0.85] drop-shadow-2xl">
-            Anant <br className="md:hidden" /><span className="text-transparent bg-clip-text bg-gradient-to-br from-cyan-300 to-cyan-600">Hejib</span>
+          <h1 className="text-7xl md:text-[9rem] font-black tracking-tighter text-white mb-6 uppercase leading-none drop-shadow-2xl">
+            ANANT <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-600">HEJIB</span>
           </h1>
           <p className="text-xl md:text-2xl text-white/70 max-w-3xl mx-auto leading-relaxed font-light mb-12 drop-shadow-lg">
             AI, Computer Vision, and Robotics Engineer building intelligent, autonomous systems. 

@@ -4,50 +4,118 @@ import { useRef, useMemo } from "react";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import * as THREE from "three";
 
-// Interactive Black Hole Accretion Disk & Vortex (inspired by Blackhole InfiVerse)
+const vertexShader = `
+uniform float uTime;
+uniform vec2 uMouse;
+
+attribute float aAngle;
+attribute float aRadius;
+attribute float aSpeed;
+attribute float aSize;
+
+varying vec3 vColor;
+
+void main() {
+  vColor = color;
+  
+  // Base orbital rotation
+  float currentAngle = aAngle + uTime * aSpeed * 0.4;
+  
+  // Calculate position in orbit
+  vec3 pos = position;
+  pos.x = cos(currentAngle) * aRadius;
+  pos.z = sin(currentAngle) * aRadius;
+  
+  // Get screen-space position to calculate mouse distance
+  vec4 mvPosition = modelViewMatrix * vec4(pos, 1.0);
+  
+  // Map normalized mouse (-1 to 1) to rough view coordinates
+  vec2 mouseWorld = uMouse * vec2(12.0, 8.0);
+  
+  // Calculate 2D distance between particle and mouse
+  float dist = distance(mvPosition.xy, mouseWorld);
+  
+  // Repulsion force (strongest near mouse, tapering off)
+  float force = smoothstep(5.0, 0.0, dist);
+  
+  // Push particles away from mouse radially
+  vec2 pushDir = normalize(mvPosition.xy - mouseWorld);
+  pos.x += pushDir.x * force * 1.5;
+  pos.z += pushDir.y * force * 1.5;
+  
+  // Add vertical distortion wave based on mouse interaction
+  pos.y += sin(dist * 2.0 - uTime * 4.0) * force * 0.5;
+
+  mvPosition = modelViewMatrix * vec4(pos, 1.0);
+  
+  // Dynamic size based on camera distance and mouse force
+  gl_PointSize = aSize * (40.0 / -mvPosition.z) * (1.0 + force * 1.5);
+  gl_Position = projectionMatrix * mvPosition;
+}
+`;
+
+const fragmentShader = `
+varying vec3 vColor;
+
+void main() {
+  // Create a soft glowing circular particle
+  float dist = distance(gl_PointCoord, vec2(0.5));
+  if (dist > 0.5) discard;
+  
+  // Soft edge glow
+  float alpha = smoothstep(0.5, 0.1, dist);
+  
+  // Brighter core
+  vec3 finalColor = mix(vColor, vec3(1.0), smoothstep(0.2, 0.0, dist));
+  
+  gl_FragColor = vec4(finalColor, alpha);
+}
+`;
+
 function BlackHoleAccretionDisk() {
-  const pointsRef = useRef<THREE.Points>(null);
+  const shaderRef = useRef<THREE.ShaderMaterial>(null);
   const ringRef = useRef<THREE.Group>(null);
   const { mouse } = useThree();
 
-  // Generate 3500 spiral particles forming a swirling black hole accretion disk
-  const { positions, colors, initialAngles, radii, speeds } = useMemo(() => {
-    const count = 3500;
+  // Generate 15,000 particles
+  const { positions, colors, angles, radii, speeds, sizes } = useMemo(() => {
+    const count = 15000;
     const pos = new Float32Array(count * 3);
     const col = new Float32Array(count * 3);
-    const angles = new Float32Array(count);
-    const rads = new Float32Array(count);
-    const spds = new Float32Array(count);
+    const ang = new Float32Array(count);
+    const rad = new Float32Array(count);
+    const spd = new Float32Array(count);
+    const siz = new Float32Array(count);
 
     const cyan = new THREE.Color("#4fd1e5");
     const blue = new THREE.Color("#1769ff");
-    const darkCyan = new THREE.Color("#0d4863");
+    const darkBlue = new THREE.Color("#0a2b5e");
     const white = new THREE.Color("#ffffff");
 
     for (let i = 0; i < count; i++) {
-      // Radius distribution: dense near the event horizon (r=2.2 to r=8.5)
-      const r = 2.2 + Math.pow(Math.random(), 2.2) * 7.5;
+      // Density distribution: packed at event horizon (r=2.2), sparser outward
+      const r = 2.2 + Math.pow(Math.random(), 2.5) * 8.0;
       const angle = Math.random() * Math.PI * 2;
-      const height = (Math.random() - 0.5) * (0.35 + (r - 2.2) * 0.15); // thicker at outer edges
+      const height = (Math.random() - 0.5) * (0.2 + (r - 2.2) * 0.15); 
 
       pos[i * 3] = Math.cos(angle) * r;
       pos[i * 3 + 1] = height;
       pos[i * 3 + 2] = Math.sin(angle) * r;
 
-      angles[i] = angle;
-      rads[i] = r;
-      // Keplerian-like speed: faster closer to center
-      spds[i] = 0.8 / Math.sqrt(r);
+      ang[i] = angle;
+      rad[i] = r;
+      spd[i] = 1.0 / Math.pow(r, 0.8); // Fast at center, slow at edges
+      siz[i] = Math.random() * 0.8 + 0.2; // Varied sizes
 
-      // Color mapping: hotter/brighter near event horizon
+      // Color mapping
       let mixedColor = new THREE.Color();
-      const t = (r - 2.2) / 7.5;
-      if (t < 0.2) {
-        mixedColor.lerpColors(white, cyan, t / 0.2);
-      } else if (t < 0.6) {
-        mixedColor.lerpColors(cyan, blue, (t - 0.2) / 0.4);
+      const t = (r - 2.2) / 8.0;
+      if (t < 0.1) {
+        mixedColor.lerpColors(white, cyan, t / 0.1);
+      } else if (t < 0.4) {
+        mixedColor.lerpColors(cyan, blue, (t - 0.1) / 0.3);
       } else {
-        mixedColor.lerpColors(blue, darkCyan, (t - 0.6) / 0.4);
+        mixedColor.lerpColors(blue, darkBlue, (t - 0.4) / 0.6);
       }
 
       col[i * 3] = mixedColor.r;
@@ -55,33 +123,36 @@ function BlackHoleAccretionDisk() {
       col[i * 3 + 2] = mixedColor.b;
     }
 
-    return { positions: pos, colors: col, initialAngles: angles, radii: rads, speeds: spds };
+    return { positions: pos, colors: col, angles: ang, radii: rad, speeds: spd, sizes: siz };
   }, []);
 
-  useFrame((state, delta) => {
-    if (!pointsRef.current) return;
+  const uniforms = useMemo(() => ({
+    uTime: { value: 0 },
+    uMouse: { value: new THREE.Vector2(0, 0) }
+  }), []);
+
+  useFrame((state) => {
     const time = state.clock.elapsedTime;
-    const pos = pointsRef.current.geometry.attributes.position.array as Float32Array;
-
-    for (let i = 0; i < 3500; i++) {
-      const currentAngle = initialAngles[i] + time * speeds[i] * 0.4;
-      const r = radii[i];
-      pos[i * 3] = Math.cos(currentAngle) * r;
-      pos[i * 3 + 2] = Math.sin(currentAngle) * r;
+    
+    // Update shader uniforms
+    if (shaderRef.current) {
+      shaderRef.current.uniforms.uTime.value = time;
+      
+      // Smoothly interpolate mouse position for fluid interaction
+      shaderRef.current.uniforms.uMouse.value.lerp(mouse, 0.1);
     }
-    pointsRef.current.geometry.attributes.position.needsUpdate = true;
 
-    // Subtle tilt & mouse interaction
+    // Subtle tilt & gyroscopic rotation of the whole system
     if (ringRef.current) {
-      ringRef.current.rotation.x = 1.1 + mouse.y * 0.15;
-      ringRef.current.rotation.y = mouse.x * 0.25;
-      ringRef.current.rotation.z = time * 0.03;
+      ringRef.current.rotation.x = 1.1 + mouse.y * 0.1;
+      ringRef.current.rotation.y = mouse.x * 0.2;
+      ringRef.current.rotation.z = time * 0.05;
     }
   });
 
   return (
-    <group ref={ringRef} position={[0, 0.5, -3]}>
-      {/* Central Black Void (The Event Horizon) */}
+    <group ref={ringRef} position={[0, 0.5, -4]}>
+      {/* Central Black Void (Event Horizon) */}
       <mesh position={[0, 0, 0]}>
         <sphereGeometry args={[2.0, 64, 64]} />
         <meshBasicMaterial color="#000000" />
@@ -89,30 +160,29 @@ function BlackHoleAccretionDisk() {
 
       {/* Luminous Inner Glow Ring */}
       <mesh rotation={[Math.PI / 2, 0, 0]}>
-        <ringGeometry args={[2.02, 2.35, 64]} />
-        <meshBasicMaterial color="#ffffff" transparent opacity={0.8} side={THREE.DoubleSide} blending={THREE.AdditiveBlending} />
+        <ringGeometry args={[2.01, 2.3, 128]} />
+        <meshBasicMaterial color="#ffffff" transparent opacity={0.6} side={THREE.DoubleSide} blending={THREE.AdditiveBlending} />
       </mesh>
 
-      {/* Outer Cyan Gravitational Lens Ring */}
-      <mesh rotation={[Math.PI / 2, 0, 0]}>
-        <ringGeometry args={[2.35, 3.8, 64]} />
-        <meshBasicMaterial color="#4fd1e5" transparent opacity={0.3} side={THREE.DoubleSide} blending={THREE.AdditiveBlending} />
-      </mesh>
-
-      {/* Accretion Disk Swirling Particles */}
-      <points ref={pointsRef}>
+      {/* GPU Accelerated Particle System (15,000 particles) */}
+      <points>
         <bufferGeometry>
           <bufferAttribute attach="attributes-position" args={[positions, 3]} />
           <bufferAttribute attach="attributes-color" args={[colors, 3]} />
+          <bufferAttribute attach="attributes-aAngle" args={[angles, 1]} />
+          <bufferAttribute attach="attributes-aRadius" args={[radii, 1]} />
+          <bufferAttribute attach="attributes-aSpeed" args={[speeds, 1]} />
+          <bufferAttribute attach="attributes-aSize" args={[sizes, 1]} />
         </bufferGeometry>
-        <pointsMaterial
-          size={0.045}
-          vertexColors
+        <shaderMaterial
+          ref={shaderRef}
+          vertexShader={vertexShader}
+          fragmentShader={fragmentShader}
+          uniforms={uniforms}
           transparent
-          opacity={0.85}
-          blending={THREE.AdditiveBlending}
+          vertexColors
           depthWrite={false}
-          sizeAttenuation
+          blending={THREE.AdditiveBlending}
         />
       </points>
     </group>
